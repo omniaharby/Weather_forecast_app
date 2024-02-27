@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="deploymentTargetDropDown">
+    <value>
+      <entry key="ShowDailyWeatherView">
+        <State />
+      </entry>
+      <entry key="ShowHomeScreen">
+        <State />
+      </entry>
+      <entry key="ShowWeatherItemView">
+        <State />
+      </entry>
+      <entry key="app">
+        <State />
+      </entry>
+      <entry key="showDailyWeatherView">
+        <State />
+      </entry>
+      <entry key="showWeatherChart">
+        <State />
+      </entry>
+    </value>
+  </component>
+</project>
