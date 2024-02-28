@@ -5,7 +5,6 @@ import com.example.weatherforecast.domain.Condition
 import com.example.weatherforecast.domain.CurrentWeather
 import com.example.weatherforecast.domain.HourlyWeather
 import com.example.weatherforecast.domain.WeatherChartColors
-import com.example.weatherforecast.domain.WeatherICon
 
 fun getData() = listOf(
     HourlyWeather("12 PM", Condition.Cloudy, "10"),

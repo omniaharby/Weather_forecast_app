@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -21,24 +23,30 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.weatherforecast.R
-import com.example.weatherforecast.data.getDailyData
-import com.example.weatherforecast.data.getData
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.weatherforecast.domain.COLOR_KEY_Vibrant_DARK
+import com.example.weatherforecast.domain.Condition
 import com.example.weatherforecast.domain.WeatherChartColors
+import com.example.weatherforecast.domain.conditionToBackgroundImage
 import com.example.weatherforecast.domain.extractColorsFromResource
 import com.example.weatherforecast.ui.components.DailyWeather
 import com.example.weatherforecast.ui.components.WeatherChart
 
 @Composable
-fun HomeScreen(context: Context) {
+fun HomeScreen(context: Context, viewModel: HomeViewModel = hiltViewModel()) {
 
-    var backgroundImage: Int by remember {
-        mutableStateOf(R.drawable.sunset)
-    }
+    val dailyWeather by
+    viewModel.forecastData.observeAsState()
+
+    val backgroundImage = conditionToBackgroundImage(
+        dailyWeather?.dayWeather?.condition ?: Condition.Clear
+    ).drawable
+
     var colors: Map<String, Color> by remember {
         mutableStateOf(mapOf())
     }
+
     var weatherChartColors = WeatherChartColors(
         itemBackgroundColor = (colors[COLOR_KEY_Vibrant_DARK] ?: Color.DarkGray).copy(alpha = 0.3f),
     )
@@ -48,22 +56,32 @@ fun HomeScreen(context: Context) {
     }
 
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = painterResource(id = backgroundImage),
-            contentDescription = "Background Image",
-            contentScale = ContentScale.FillBounds
-        )
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(20.dp))
-            DailyWeather(currentWeather = getDailyData())
-            WeatherChart(data = getData(), weatherChartColors)
+    if (dailyWeather != null) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                modifier = Modifier.fillMaxSize(),
+                painter = painterResource(id = backgroundImage),
+                contentDescription = "Background Image",
+                contentScale = ContentScale.FillBounds
+            )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(20.dp))
+                dailyWeather?.apply {
+                    DailyWeather(currentWeather = dayWeather)
+                    WeatherChart(data = hourlyWeather, weatherChartColors)
+                }
+            }
         }
+    } else {
+        Text(
+            text = "Loading...",
+            Modifier.fillMaxSize(),
+            fontSize = 24.sp,
+        )
     }
 }
 

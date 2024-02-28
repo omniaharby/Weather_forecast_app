@@ -9,30 +9,28 @@ data class CurrentWeather(
 )
 
 data class HourlyWeather(
-    val time: String,
-    val condition: Condition,
-    val degree: String
+    val time: String, val condition: Condition, val degree: String
 )
 
-data class DailyWeather(val dayWeather: CurrentWeather, val hourlyWeather: HourlyWeather)
+data class DailyWeather(val dayWeather: CurrentWeather, val hourlyWeather: List<HourlyWeather>)
 
 enum class Condition(val value: String) {
-    Cloudy("Cloudy"),
-    Overcast("Overcast"),
-    PartlyCloudy("Partly cloudy"),
-    PatchyRainNearby("Patchy rain nearby"),
-    Clear("Clear"),
-    Sunny("Sunny");
+    Cloudy("cloudy"), Overcast("overcast"), PartlyCloudy("partly cloudy"), PatchyRainNearby("patchy rain nearby"), LightDrizzle(
+        "light drizzle"
+    ),
+    Clear("clear"), Sunny("sunny"), LightRain("light rain");
 
     companion object {
         public fun fromValue(value: String): Condition = when (value) {
-            "Cloudy" -> Cloudy
-            "Overcast" -> Overcast
-            "Partly cloudy" -> PartlyCloudy
-            "Patchy rain nearby" -> PatchyRainNearby
-            "Clear" -> Clear
-            "Sunny" -> Sunny
-            else -> throw IllegalArgumentException()
+            "cloudy" -> Cloudy
+            "overcast" -> Overcast
+            "partly cloudy" -> PartlyCloudy
+            "patchy rain nearby" -> PatchyRainNearby
+            "clear" -> Clear
+            "sunny" -> Sunny
+            "light drizzle" -> LightDrizzle
+            "light rain" -> LightRain
+            else -> Cloudy
         }
     }
 }

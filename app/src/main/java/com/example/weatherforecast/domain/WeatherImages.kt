@@ -22,5 +22,6 @@ enum class WeatherBackGround(val drawable: Int) {
     WarmCLearNight(R.drawable.moondessert),
     RainySky(R.drawable.rain),
     ColdIcyWeather(R.drawable.snow),
-    SunSetClearSky(R.drawable.sunset)
+    SunSetClearSky(R.drawable.sunset),
+    Overcast(R.drawable.overcastcloudy);
 }

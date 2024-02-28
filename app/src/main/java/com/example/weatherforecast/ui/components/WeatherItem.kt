@@ -25,8 +25,7 @@ import com.example.weatherforecast.data.getWeatherChartColor
 import com.example.weatherforecast.domain.Condition
 import com.example.weatherforecast.domain.HourlyWeather
 import com.example.weatherforecast.domain.WeatherChartColors
-import com.example.weatherforecast.domain.WeatherICon
-import com.example.weatherforecast.domain.conditionIconMapper
+import com.example.weatherforecast.domain.conditionToIcon
 
 @Composable
 fun WeatherItem(weather: HourlyWeather, colors: WeatherChartColors) {
@@ -58,7 +57,7 @@ fun WeatherItem(weather: HourlyWeather, colors: WeatherChartColors) {
             )
             Spacer(modifier = Modifier.height(26.dp))
             Image(
-                painter = painterResource(id = conditionIconMapper(weather.condition).drawable),
+                painter = painterResource(id = conditionToIcon(weather.condition).drawable),
                 contentDescription = "Icon Image",
                 Modifier.size(45.dp)
             )
