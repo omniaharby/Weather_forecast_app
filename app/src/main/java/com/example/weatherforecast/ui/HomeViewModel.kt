@@ -23,9 +23,12 @@ class HomeViewModel @Inject constructor(
         get() = _forecastData
 
     init {
+        loadData()
+    }
+
+    private fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = getForecast()
-            when (result) {
+            when (val result = getForecast()) {
                 is Response.Success -> {
                     _forecastData.postValue(result.data)
                 }
@@ -35,7 +38,6 @@ class HomeViewModel @Inject constructor(
                     Log.e("Error", result.message)
                 }
             }
-
         }
     }
 

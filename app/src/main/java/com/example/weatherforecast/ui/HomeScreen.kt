@@ -36,8 +36,7 @@ import com.example.weatherforecast.ui.components.WeatherChart
 @Composable
 fun HomeScreen(context: Context, viewModel: HomeViewModel = hiltViewModel()) {
 
-    val dailyWeather by
-    viewModel.forecastData.observeAsState()
+    val dailyWeather by viewModel.forecastData.observeAsState()
 
     val backgroundImage = conditionToBackgroundImage(
         dailyWeather?.dayWeather?.condition ?: Condition.Clear
@@ -47,14 +46,12 @@ fun HomeScreen(context: Context, viewModel: HomeViewModel = hiltViewModel()) {
         mutableStateOf(mapOf())
     }
 
-    var weatherChartColors = WeatherChartColors(
+    val weatherChartColors = WeatherChartColors(
         itemBackgroundColor = (colors[COLOR_KEY_Vibrant_DARK] ?: Color.DarkGray).copy(alpha = 0.3f),
     )
-
     LaunchedEffect(true) {
         extractColorsFromResource(context, backgroundImage) { colors = it }
     }
-
 
     if (dailyWeather != null) {
         Box(modifier = Modifier.fillMaxSize()) {

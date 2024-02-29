@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 class Repository @Inject constructor(val dataProvider: DataProvider) {
     suspend fun getForecastData(): Response<DailyWeather> {
-        return dataProvider.fetchData("London")
+        return dataProvider.fetchData("Riyadh")
     }
 }

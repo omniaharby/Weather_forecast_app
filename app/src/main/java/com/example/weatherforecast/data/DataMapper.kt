@@ -32,7 +32,7 @@ fun mapResponseToDailyWeather(response: WeatherAPIResponse): DailyWeather {
 
 fun formatDateFromTimestamp(timestamp: Long, pattern: String): String {
     val sdf = SimpleDateFormat(pattern, Locale.getDefault())
-    return sdf.format(Date(timestamp))
+    return sdf.format(Date(timestamp * 1000))
 }
 
 const val timePattern = "HH:mm"

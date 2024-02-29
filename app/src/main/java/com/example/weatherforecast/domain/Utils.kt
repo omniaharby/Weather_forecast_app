@@ -1,5 +1,9 @@
 package com.example.weatherforecast.domain
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+
 fun conditionToIcon(condition: Condition): WeatherICon {
     return when (condition) {
         Condition.Clear -> WeatherICon.ClearNight
@@ -24,4 +28,15 @@ fun conditionToBackgroundImage(condition: Condition): WeatherBackGround {
         Condition.LightDrizzle -> WeatherBackGround.RainySky
         else -> WeatherBackGround.ColdFoggySky
     }
+}
+
+
+fun isNetworkAvailable(context: Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val network = connectivityManager.activeNetwork ?: return false
+    val networkCapabilities =
+        connectivityManager.getNetworkCapabilities(network) ?: return false
+
+    return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
 }
