@@ -31,12 +31,15 @@ import com.example.weatherforecast.domain.WeatherChartColors
 import com.example.weatherforecast.domain.conditionToBackgroundImage
 import com.example.weatherforecast.domain.extractColorsFromResource
 import com.example.weatherforecast.ui.components.DailyWeather
+import com.example.weatherforecast.ui.components.RetryConnection
 import com.example.weatherforecast.ui.components.WeatherChart
 
 @Composable
 fun HomeScreen(context: Context, viewModel: HomeViewModel = hiltViewModel()) {
 
     val dailyWeather by viewModel.forecastData.observeAsState()
+
+    val networkError by viewModel.networkError.observeAsState()
 
     val backgroundImage = conditionToBackgroundImage(
         dailyWeather?.dayWeather?.condition ?: Condition.Clear
@@ -72,6 +75,10 @@ fun HomeScreen(context: Context, viewModel: HomeViewModel = hiltViewModel()) {
                     WeatherChart(data = hourlyWeather, weatherChartColors)
                 }
             }
+        }
+    } else if (networkError == true) {
+        RetryConnection {
+            viewModel.loadData()
         }
     } else {
         Text(

@@ -21,12 +21,16 @@ class HomeViewModel @Inject constructor(
     private val _forecastData = MutableLiveData<DailyWeather?>()
     val forecastData: LiveData<DailyWeather?>
         get() = _forecastData
+    private val _isNetworkError = MutableLiveData(false)
+    val networkError: LiveData<Boolean>
+        get() = _isNetworkError
 
     init {
         loadData()
     }
 
-    private fun loadData() {
+    fun loadData() {
+        _isNetworkError.postValue(false)
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = getForecast()) {
                 is Response.Success -> {
@@ -34,8 +38,8 @@ class HomeViewModel @Inject constructor(
                 }
 
                 is Response.Failure -> {
-                    //Todo handle Error
-                    Log.e("Error", result.message)
+                    _isNetworkError.postValue(true)
+                    Log.e("OMNIA", result.message)
                 }
             }
         }

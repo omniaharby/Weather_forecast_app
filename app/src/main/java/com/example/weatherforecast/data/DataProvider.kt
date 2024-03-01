@@ -20,7 +20,7 @@ class DataProvider @Inject constructor() {
                     )
                 )
             )
-        } catch (e: Error) {
+        } catch (e: Exception ) {
             Log.e("Error", "Error fetching data from weather Api")
             Response.Failure("Error fetching data from weather Api ${e.message }")
         }
