@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     kotlin("kapt")
     id("com.android.application")
@@ -8,7 +10,9 @@ plugins {
 android {
     namespace = "com.example.weatherforecast"
     compileSdk = 34
-
+    buildFeatures {
+        buildConfig = true // Enable custom BuildConfig fields
+    }
     defaultConfig {
         applicationId = "com.example.weatherforecast"
         minSdk = 24
@@ -20,8 +24,21 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-    }
 
+        val properties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localPropertiesFile.inputStream().use { input ->
+                properties.load(input)
+            }
+        }
+        val apiKey = properties.getProperty("api_key")
+        if (apiKey.isNullOrEmpty()) {
+            throw GradleException("API key not found in local.properties file!")
+        }
+
+        buildConfigField("String", "API_KEY", "\"$apiKey\"")
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -62,8 +79,8 @@ dependencies {
     implementation("androidx.palette:palette:1.0.0")
 
     //retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
