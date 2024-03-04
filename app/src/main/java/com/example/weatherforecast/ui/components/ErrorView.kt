@@ -11,18 +11,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.weatherforecast.ui.ErrorState
 
 @Composable
-fun RetryConnection(onClick: () -> Unit) {
+fun ErrorView(state: ErrorState) {
     Column(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("please CheckYourConnection and try again")
+        Text(state.message)
         Spacer(modifier = Modifier.height(25.dp))
-        Button(onClick = onClick) {
-            Text("Try Again")
+        state.tryAgainAction?.let {
+            Button(onClick = it) {
+                Text("Try Again")
+            }
         }
     }
 }

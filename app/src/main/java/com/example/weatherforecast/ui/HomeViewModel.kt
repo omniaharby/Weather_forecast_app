@@ -25,14 +25,17 @@ class HomeViewModel @Inject constructor(
     val networkError: LiveData<Boolean>
         get() = _isNetworkError
 
-    init {
-        loadData()
+    private lateinit var _location: String
+
+    fun updateLocationData(location: String) {
+        _location = location
     }
+
 
     fun loadData() {
         _isNetworkError.postValue(false)
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = getForecast()) {
+            when (val result = getForecast(_location)) {
                 is Response.Success -> {
                     _forecastData.postValue(result.data)
                 }
@@ -45,8 +48,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getForecast(): Response<DailyWeather> {
+    private suspend fun getForecast(location: String): Response<DailyWeather> {
 
-        return repo.getForecastData()
+        return repo.getForecastData(location)
     }
 }

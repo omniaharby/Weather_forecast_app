@@ -8,9 +8,24 @@ import com.example.weatherforecast.domain.isNetworkAvailable
 
 class MainActivityViewModel : ViewModel() {
 
-    private val _isConnected = MutableLiveData<Boolean?>()
-    val isConnected: LiveData<Boolean?>
-        get() = _isConnected
+    private val _errorState = MutableLiveData<ErrorState>()
+    val errorState: LiveData<ErrorState>
+        get() = _errorState
 
-    fun checkConnectivity(context: Context) = _isConnected.postValue(isNetworkAvailable(context))
+    fun updateErrorState(message: String, isError: Boolean, action: (() -> Unit)? = null) =
+        _errorState.postValue(ErrorState(message, isError, action))
+
+    fun checkConnectivity(context: Context, retryAction: (() -> Unit)? = null) {
+        if (isNetworkAvailable(context)) {
+            updateErrorState("", false, retryAction)
+        } else {
+            updateErrorState("Please check your connection and retry", true)
+        }
+    }
 }
+
+data class ErrorState(
+    val message: String,
+    val isError: Boolean,
+    val tryAgainAction: (() -> Unit)? = null
+)

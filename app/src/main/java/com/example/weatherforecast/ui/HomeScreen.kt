@@ -31,7 +31,7 @@ import com.example.weatherforecast.domain.WeatherChartColors
 import com.example.weatherforecast.domain.conditionToBackgroundImage
 import com.example.weatherforecast.domain.extractColorsFromResource
 import com.example.weatherforecast.ui.components.DailyWeather
-import com.example.weatherforecast.ui.components.RetryConnection
+import com.example.weatherforecast.ui.components.ErrorView
 import com.example.weatherforecast.ui.components.WeatherChart
 
 @Composable
@@ -77,9 +77,12 @@ fun HomeScreen(context: Context, viewModel: HomeViewModel = hiltViewModel()) {
             }
         }
     } else if (networkError == true) {
-        RetryConnection {
-            viewModel.loadData()
-        }
+        ErrorView(
+            ErrorState(
+                "please CheckYourConnection and try again",
+                true
+            ) { viewModel.loadData() }
+        )
     } else {
         Text(
             text = "Loading...",
